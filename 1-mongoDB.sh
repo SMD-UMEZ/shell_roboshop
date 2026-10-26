@@ -28,13 +28,6 @@ Valid() {
 cp mongo.repo /etc/yum.repos.d/mongo.repo
 Valid $? "Adding Mongo Repo"
 
-Validation() {
-    if [ $2 -ne 0 ]; then
-    echo -e " $TIMESTAMP [ERROR] $R $1 is failed to install $N " | tee -a $LOG_FILE
-    else
-    echo -e " $TIMESTAMP  {INFO} $G $1 is successfully installed $N " | tee -a $LOG_FILE
-    fi
-}
 dnf list installed mongodb-org &>> $LOG_FILE
 
 if [ $? -eq 0 ]; then
@@ -42,8 +35,9 @@ if [ $? -eq 0 ]; then
  else
  echo "Installing MongoDB......"
  dnf install mongodb-org -y &>> $LOG_FILE
- Validation MongoDB $?
+ Valid $? "Installing mongodb"
 fi
- systemctl enable mongod
- systemctl start mongod
+ systemctl enable --now mongod
+ Valid $? "Enabling and starting mongodb"
+
  
