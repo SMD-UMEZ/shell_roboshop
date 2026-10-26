@@ -19,9 +19,9 @@ if [ $USER_ID -ne 0 ]; then
 fi
 Valid() {
     if [ $1 -ne 0 ]; then
-    echo -e " $TIMESTAMP $R [ERROR] $2 is failed $N " | tee -a $LOG_FILE
+    echo -e " $TIMESTAMP [ERROR] $R $2 is failed $N " | tee -a $LOG_FILE
     else
-    echo -e " $TIMESTAMP $G {INFO} $2 is success $N " | tee -a $LOG_FILE
+    echo -e " $TIMESTAMP {INFO} $G  $2 is success $N " | tee -a $LOG_FILE
     fi
 }
 
@@ -35,10 +35,10 @@ Validation() {
     echo -e " $TIMESTAMP  {INFO} $G $1 is successfully installed $N " | tee -a $LOG_FILE
     fi
 }
-dnf list installed mongo &>> $LOG_FILE
+dnf list installed mongodb-org &>> $LOG_FILE
 
 if [ $? -eq 0 ]; then
- echo -e " $TIMESTAMP {INFO} $Y {INFO} Mongo DB is already installed....SKIPPING $N " | tee -a $LOG_FILE
+ echo -e " $TIMESTAMP {INFO} $Y  Mongo DB is already installed....SKIPPING $N " | tee -a $LOG_FILE
  else
  echo "Installing MongoDB......"
  dnf install mongodb-org -y &>> $LOG_FILE
