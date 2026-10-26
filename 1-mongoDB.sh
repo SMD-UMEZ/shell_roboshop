@@ -30,20 +30,20 @@ Valid $? "Adding Mongo Repo"
 
 Validation() {
     if [ $2 -ne 0 ]; then
-    echo -e " $TIMESTAMP $R [ERROR] $1 is failed to install $N " | tee -a $LOG_FILE
+    echo -e " $TIMESTAMP [ERROR] $R $1 is failed to install $N " | tee -a $LOG_FILE
     else
-    echo -e " $TIMESTAMP $G {INFO} $1 is successfully installed $N " | tee -a $LOG_FILE
+    echo -e " $TIMESTAMP  {INFO} $G $1 is successfully installed $N " | tee -a $LOG_FILE
     fi
 }
 dnf list installed mongo &>> $LOG_FILE
 
 if [ $? -eq 0 ]; then
- echo -e " $TIMESTAMP $Y {INFO} Mongo DB is already installed....SKIPPING $N "
+ echo -e " $TIMESTAMP {INFO} $Y {INFO} Mongo DB is already installed....SKIPPING $N " | tee -a $LOG_FILE
  else
  echo "Installing MongoDB......"
  dnf install mongodb-org -y &>> $LOG_FILE
  Validation MongoDB $?
 fi
- systemctl enable mongod 
+ systemctl enable mongod
  systemctl start mongod
  
