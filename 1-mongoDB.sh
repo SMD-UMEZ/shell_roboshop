@@ -40,4 +40,10 @@ fi
  systemctl enable --now mongod
  Valid $? "Enabling and starting mongodb"
 
+ sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
+ Valid $? "configuring the Host server"
+
+ systemctl restart mongod
+ Valid $? "Restarting the mongodb"
+
  
