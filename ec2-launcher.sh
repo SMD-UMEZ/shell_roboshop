@@ -10,7 +10,7 @@ do
    INSTANCE_ID=$(aws ec2 run-instances \
    --image-id $AMI_ID \
    --instance-type t3.micro \
-   --security-groups "common","roboshop-$instance" \
+   --security-groups "common" \
    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value='roboshop-$instance'}]' \
    --query 'Instances[0].InstanceId' \
    --output text
