@@ -7,8 +7,14 @@ DOMAIN="mylab.sbs"
 for instance in $@
 do 
       echo "Launching $instance instance"
-   INSTANCE_ID=$(aws ec2 run-instances     --image-id $AMI_ID    --instance-type t3.micro     --security-groups "common" "roboshop-$instance"     --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$instance}]'     --query 'Instances[0].InstanceId'     --output text
-)
+   INSTANCE_ID=$(aws ec2 run-instances \
+   --image-id $AMI_ID \
+   --instance-type t3.micro \
+   --security-groups "common" "roboshop-$instance" \
+   --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$instance}]' \
+   --query 'Instances[0].InstanceId' \
+   --output text
+                   )
       echo "instance_id= $INSTANCE_ID"
 
      if [ $instance == "frontend" ]; then
@@ -28,8 +34,4 @@ do
     aws route53 change-resource-record-sets \
     --hosted-zone-id $ZONE \
     --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$R53_ID'","Type":"A","TTL":1,"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
-
-
-
-
 done
