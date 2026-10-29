@@ -13,4 +13,13 @@ N='\e[0m'
     echo -e "$R [ERROR] : At  least 2 arguments required. $N"
     echo "Usage Of $0 is [create/destroy] [Instance1 Instance2 ....]"
     exit 1
+ fi
+
+ ACTION=$1
+ shift #  first arg will be removed #
+
+ if [ $ACTION != "create" ] && [ $ACTION != "delete" ]; then
+   echo -e "$R [ERROR] : First arg should be create either delete $N"
+    echo "Usage Of $0 is [create/destroy] [Instance1 Instance2 ....]"
+    exit 1
  fi   
