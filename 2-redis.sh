@@ -39,7 +39,7 @@ if [ $? -eq 0 ]; then
 fi
 
 sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf
-Valid $? "Configuring the redis
+Valid $? "Configuring the redis"
 
  systemctl enable --now redis
  Valid $? "Enabling and starting redis "
