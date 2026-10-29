@@ -28,7 +28,7 @@ get_instance_id() {
 
     name=$1
     aws ec2 describe-instances \
-    --filters "Name=tag:Name,Values=roboshop-$name" \
+    --filters "Name=tag:Name,Values=roboshop-roboshop-$instance" \
               "Name=instance-state-name,Values=running" \
     --query "Reservations[].Instances[].InstanceId" \
     --output text
@@ -53,6 +53,6 @@ get_instance_id() {
        echo "roboshop-$instance is already exists : $INSTANCE_ID"
        fi
        fi
-       
+
 
  done
