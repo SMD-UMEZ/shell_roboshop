@@ -25,6 +25,8 @@ Valid() {
     fi
 }
 
+rm -rf /etc/yum.repos.d/mongo.repo
+
 cp mongo.repo /etc/yum.repos.d/mongo.repo
 Valid $? "Adding Mongo Repo"
 
