@@ -27,14 +27,14 @@ N='\e[0m'
 get_instance_id() {
 
     name=$1
-    aws ec2 describe-instances --filters "Name=tag:Name,Values=roboshop-$name" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text
+    aws ec2 describe-instances --filters "Name=tag:Name,Values= roboshop-$name" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text
 }   
 
  for instance in $@
  do
        INSTANCE_ID=$(get_instance_id roboshop-$instance)
        if [ $ACTION == "create" ]; then
-        if [ $INSTANCE_ID == "none" ]; then
+        if [ $INSTANCE_ID = "none" ]; then
          echo "Launching the Instance : roboshop-$instance"
           INSTANCE_ID=$(aws ec2 run-instances \
    --image-id $AMI_ID \
