@@ -22,4 +22,37 @@ N='\e[0m'
    echo -e "$R [ERROR] : First arg should be create either delete $N"
     echo "Usage Of $0 is [create/destroy] [Instance1 Instance2 ....]"
     exit 1
- fi   
+ fi
+
+get_instance_id() {
+
+    name=$1
+    aws ec2 describe-instances \
+    --filters "Name=tag:Name,Values=roboshop-$name" \
+              "Name=instance-state-name,Values=running" \
+    --query "Reservations[].Instances[].InstanceId" \
+    --output text
+}   
+
+ for instance in $@
+ do
+       INSTANCE_ID=$(get_instance_id roboshop-$instance)
+       if [ $ACTION == "create" ]; then
+        if [ $INSTANCE_ID == "none" ]; then
+         echo "Launching the Instance : roboshop-$instance"
+          INSTANCE_ID=$(aws ec2 run-instances \
+   --image-id $AMI_ID \
+   --instance-type t3.micro \
+   --security-groups "common" "roboshop-$instance" \
+   --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value='roboshop-$instance'}]' \
+   --query 'Instances[0].InstanceId' \
+   --output text
+                   )
+      echo "Launched Instance : $INSTANCE_ID"
+      else
+       echo "roboshop-$instance is already exists : $INSTANCE_ID"
+       fi
+       fi
+       
+
+ done
