@@ -74,7 +74,7 @@ name=$1
       else
           aws ec2 terminate-instances --instance-ids $INSTANCE_ID
 
-          echo -e "$G Terminating $instance $N "
+          echo -e "$G Terminating instances : $instance $N "
 
        fi     
     fi
