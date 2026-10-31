@@ -34,7 +34,7 @@ name=$1
        INSTANCE_ID=$(get_instance_id $instance)
        if [ $ACTION == "create" ]; then
        if [ "$INSTANCE_ID" = "None" ]; then
-         echo "Launching the Instance : roboshop-$instance"
+         echo  "  Launching the Instance : roboshop-$instance"
           INSTANCE_ID=$(aws ec2 run-instances \
    --image-id $AMI_ID \
    --instance-type t3.micro \
@@ -43,11 +43,40 @@ name=$1
    --query 'Instances[0].InstanceId' \
    --output text
                    )
-      echo "Launched Instance : $INSTANCE_ID"
+      echo -e " $G $instance Launched Instance $N : $INSTANCE_ID"
       else
-       echo "roboshop-$instance is already exists : $INSTANCE_ID"
-       fi
+       echo -e " $Y roboshop-$instance is already exists $N : $INSTANCE_ID"
        fi
 
+       ## Update ROute 53 ###
+        if [ $instance == "frontend" ]; then
+           IP=$(aws ec2 describe-instances \
+    --instance-ids $INSTANCE_ID \
+    --query 'Reservations[*].Instances[*].PublicIpAddress' \
+    --output text)
+     R53_ID="$DOMAIN"
+    else
+     IP=$(aws ec2 describe-instances \
+    --instance-ids $INSTANCE_ID \
+    --query 'Reservations[*].Instances[*].PrivateIpAddress' \
+    --output text)
+    R53_ID="$instance.$DOMAIN"
+    fi
+
+    aws route53 change-resource-record-sets \
+    --hosted-zone-id $ZONE \
+    --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"'$R53_ID'","Type":"A","TTL":1,"ResourceRecords":[{"Value":"'$IP'"}]}}]}'
+    
+    else
+      
+      if [ "$INSTANCE_ID" = "None" ]; then
+      echo -e " $Y $instance is already destroyed nothing to do ...... $N "
+      else
+          aws ec2 terminate-instances --instance-ids $INSTANCE_ID
+
+          echo -e "$G $instance is destroyed successfully......$N "
+
+       fi     
+    fi
 
  done
