@@ -43,7 +43,7 @@ cd /usr/share/nginx/html
 unzip /tmp/frontend.zip
 Valid $? "Downloading and extracting zip file"
 
-cp $script_dir/nginx.conf /etc/nginx/nginx.conf
+cp $script_dir/nginx.con /etc/nginx/nginx.conf
  Valid $? "creating systemctl service"
 
  systemctl restart nginx 
