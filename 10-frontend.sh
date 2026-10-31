@@ -42,7 +42,7 @@ curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v
 cd /usr/share/nginx/html 
 unzip /tmp/frontend.zip
 Valid $? "Downloading and extracting zip file"
-
+rm -rf /etc/nginx/nginx.conf
 cp $script_dir/nginx.con /etc/nginx/nginx.conf
  Valid $? "creating systemctl service"
 
